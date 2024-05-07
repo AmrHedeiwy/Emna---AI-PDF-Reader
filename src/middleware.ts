@@ -1,9 +1,30 @@
-import { withAuth } from 'next-auth/middleware';
+import { getToken } from 'next-auth/jwt';
+import { NextRequest, NextResponse } from 'next/server';
 
-export default withAuth({
-  pages: {
-    signIn: '/sign-in'
+const protectedRoutes = ['/dashboard'];
+const publicRoutes = ['/sign-in', '/sign-up'];
+
+export default async function middleware(req: NextRequest) {
+  const path = req.nextUrl.pathname;
+  const isProtectedRoute = protectedRoutes.includes(path);
+  const isPublicRoute = publicRoutes.includes(path);
+
+  const token = await getToken({
+    req,
+    secret: process.env.NEXTAUTH_SECRET
+  });
+
+  if (isProtectedRoute && !token?.id) {
+    return NextResponse.redirect(new URL('/sign-in', req.nextUrl));
   }
-});
 
-export const config = { matcher: ['/dashboard'] };
+  if (isPublicRoute && token?.id) {
+    return NextResponse.redirect(new URL('/', req.nextUrl));
+  }
+
+  return NextResponse.next();
+}
+
+export const config = {
+  matcher: ['/dashboard', '/sign-in', '/sign-up']
+};

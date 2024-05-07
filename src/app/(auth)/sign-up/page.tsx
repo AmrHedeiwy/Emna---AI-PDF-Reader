@@ -4,30 +4,26 @@ import Link from 'next/link';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { toast } from 'sonner';
 
 import { ArrowRight, Loader2 } from 'lucide-react';
 import { Google, Logo } from '@/components/Icons';
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { ZodError } from 'zod';
 import {
   CreateAccountCredentialsValidator,
   TCreateAccountCredentialsValidator
 } from '@/lib/validators/auth-credentials-validator';
-import { signIn, useSession } from 'next-auth/react';
-import { toast } from 'sonner';
+import { signIn } from 'next-auth/react';
+
 import { trpc } from '@/app/_trpc/client';
-import { ZodError } from 'zod';
+
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
 
 const Page = () => {
   const router = useRouter();
-  const session = useSession();
-
-  useEffect(() => {
-    if (session.status === 'authenticated') router.push('/');
-  }, [session, router]);
 
   const {
     register,

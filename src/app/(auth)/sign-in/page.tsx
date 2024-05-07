@@ -19,19 +19,12 @@ import { signIn, useSession } from 'next-auth/react';
 import { toast } from 'sonner';
 
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect } from 'react';
 
 const Page = () => {
   const router = useRouter();
 
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get('callbackUrl');
-
-  const session = useSession();
-
-  useEffect(() => {
-    if (session.status === 'authenticated' && !callbackUrl) router.push('/');
-  }, [session, router, callbackUrl]);
 
   const {
     register,
