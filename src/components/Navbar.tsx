@@ -8,10 +8,10 @@ const Navbar = () => {
     <nav className="sticky h-14 top-0 inset-x-0 w-full z-50 border-b border-gray-200 bg-white/75 backdrop-blur-lg transition-all">
       <MaxWidthWrapper>
         <div className="flex items-center justify-between h-14">
-          <div className="ml-2 flex items-center space-x-1 lg:ml-0">
-            <Logo className="w-12 h-12" />
-            <p className="pt-1.5 text-gray-900 font-medium">Emna.</p>
-          </div>
+          <Link href="/" className="ml-2 flex items-center space-x-1.5 lg:ml-0">
+            <Logo className="w-10 h-10 mb-0.5" />
+            <p className="self-end text-gray-900 font-medium">Emna</p>
+          </Link>
 
           <div className="hidden sm:flex items-center space-x-4">
             <Link

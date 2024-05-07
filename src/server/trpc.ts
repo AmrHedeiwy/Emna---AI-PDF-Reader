@@ -1,6 +1,19 @@
-import { initTRPC } from '@trpc/server';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { initTRPC, TRPCError } from '@trpc/server';
+import { getServerSession } from 'next-auth';
 
 const t = initTRPC.create();
+const middleware = t.middleware;
 
 export const router = t.router;
 export const publicProcedure = t.procedure;
+
+const isAuth = middleware(async ({ next }) => {
+  const session = await getServerSession(authOptions);
+
+  if (!session || !session.user.id) throw new TRPCError({ code: 'UNAUTHORIZED' });
+
+  return next({ ctx: { user: session?.user } });
+});
+
+export const privateProcudure = t.procedure.use(isAuth);
