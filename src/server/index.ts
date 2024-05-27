@@ -1,12 +1,11 @@
 import { z } from 'zod';
 import authRouter from './routers/auth';
 import { privateProcudure, router } from './trpc';
+import dashboardRouter from './routers/dashboard';
 
 export const appRouter = router({
   auth: authRouter,
-  a: privateProcudure.input(z.object({ a: z.string() })).query(() => {
-    return 'asdas';
-  })
+  dashboard: dashboardRouter
 });
 
 export type AppRouter = typeof appRouter;

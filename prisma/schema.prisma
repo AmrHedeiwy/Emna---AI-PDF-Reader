@@ -21,10 +21,15 @@ model User {
   image         String?
   hashedPassword String?
 
+  stripeCustomerId String? @unique @map(name: "stripe_customer_id")
+  stripeSubscriptionId String? @unique @map(name: "stripe_subscription_id")
+  stripePriceId String? @map(name: "stripe_price_id")
+  stripeCurrentPeriodEnd DateTime? @map(name: "stripe_current_period_end")
+
   accounts      Account[]
-  // Optional for WebAuthn support
-  Authenticator Authenticator[]
- 
+  files File[]
+  messages Message[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -50,19 +55,45 @@ model Account {
   @@id([provider, providerAccountId])
 }
 
+enum UploadStatus {
+  PENDING
+  PROCESSING
+  FAILED
+  SUCCESS
+}
+
+model File {
+  id String @id @default(cuid())
+  name String
+
+  uploadStatus UploadStatus @default(PENDING)
+
+  url String
+  key String
+
+  user User? @relation(fields: [userId], references: [id])
+  userId String?
+
+  messages Message[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
 
 
-// Optional for WebAuthn support
-model Authenticator {
-  id                   String  @id @default(cuid())
-  credentialID         String  @unique
-  userId               String
-  providerAccountId    String
-  credentialPublicKey  String
-  counter              Int
-  credentialDeviceType String
-  credentialBackedUp   Boolean
-  transports           String?
- 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+model Message {
+  id String @id @default(cuid())
+  content String @db.Text()
+
+  isUserMessage Boolean
+
+
+  user User? @relation(fields: [userId], references: [id])
+  userId String?
+  file File? @relation(fields: [fileId], references: [id])
+  fileId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

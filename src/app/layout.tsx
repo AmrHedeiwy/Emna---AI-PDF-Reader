@@ -1,12 +1,11 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
 import './globals.css';
 import { cn } from '@/lib/utils';
 import Navbar from '@/components/Navbar';
 import Providers from '@/components/Providers';
 import { Toaster } from 'sonner';
 
-const inter = Inter({ subsets: ['latin'] });
+import 'simplebar-react/dist/simplebar.min.css';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -20,11 +19,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="light">
-      <body className={cn('min-h-screen font-sans antialiased grainy', inter.className)}>
-        <Providers>
-          <Navbar />
-          {children}
-        </Providers>
+      <body className={cn('min-h-screen font-sans antialiased grainy')}>
+        <main>
+          <Providers>
+            <Navbar />
+            {children}
+          </Providers>
+        </main>
 
         <Toaster position="top-center" richColors />
       </body>

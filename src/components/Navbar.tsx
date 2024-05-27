@@ -5,8 +5,8 @@ import { buttonVariants } from './ui/button';
 
 const Navbar = () => {
   return (
-    <nav className="sticky h-14 top-0 inset-x-0 w-full z-50 border-b border-gray-200 bg-white/75 backdrop-blur-lg transition-all">
-      <MaxWidthWrapper>
+    <header className="sticky h-14 top-0 inset-x-0 w-full z-50">
+      <MaxWidthWrapper className="max-w-screen-lg rounded-lg backdrop-blur-lg transition-all lg:px-4">
         <div className="flex items-center justify-between h-14">
           <Link href="/" className="ml-2 flex items-center space-x-1.5 lg:ml-0">
             <Logo className="w-10 h-10 mb-0.5" />
@@ -32,7 +32,7 @@ const Navbar = () => {
           </div>
         </div>
       </MaxWidthWrapper>
-    </nav>
+    </header>
   );
 };
 

@@ -7,9 +7,6 @@ export default function Home() {
   return (
     <>
       <MaxWidthWrapper className="flex flex-col items-center justify-center mb-12 mt-28 sm:mt-40 text-center">
-        <div className="flex items-center justify-center mx-auto max-w-fit px-7 py-2 mb-4 bg-white backdrop-blur border border-gray-200 shadow-md rounded-full overflow-hidden transition-all hover:border-gray-300">
-          <p className="font-medium text-sm text-gray-700">Emna is now public!</p>
-        </div>
         <h1 className="font-bold tracking-tight text-5xl md:text-6xl lg:text-7xl max-w-4xl">
           Chat with your <span className="text-green-500">documents</span> in seconds
         </h1>
@@ -87,16 +84,10 @@ export default function Home() {
             <div className="flex flex-col space-y-2 border-l-4 md:border-l-0 md:border-t-2 border-zinc-300 py-2 pl-4 md:pl-0 md:pt-4">
               <span className="text-green-600 text-sm font-medium">Step 2</span>
               <span className="text-gray-900 font-medium text-xl">
-                Sign up for an account
+                Upload your PDF file
               </span>
               <span className="text-muted-foreground text-sm">
-                Either continue with free plan or choose our{' '}
-                <Link
-                  href="/pricing"
-                  className="text-green-600 hover:text-green-500 underline underline-offset-2"
-                >
-                  pro plan
-                </Link>
+                We&apos;ll process your file and make it ready for you to chat with.
               </span>
             </div>
           </li>
@@ -104,16 +95,10 @@ export default function Home() {
             <div className="flex flex-col space-y-2 border-l-4 md:border-l-0 md:border-t-2 border-zinc-300 py-2 pl-4 md:pl-0 md:pt-4">
               <span className="text-green-600 text-sm font-medium">Step 3</span>
               <span className="text-gray-900 font-medium text-xl">
-                Sign up for an account
+                Start asking questions
               </span>
               <span className="text-muted-foreground text-sm">
-                Either continue with free plan or choose our{' '}
-                <Link
-                  href="/pricing"
-                  className="text-green-600 hover:text-green-500 underline underline-offset-2"
-                >
-                  pro plan
-                </Link>
+                It&apos;s that simple. Try out Emna today!
               </span>
             </div>
           </li>

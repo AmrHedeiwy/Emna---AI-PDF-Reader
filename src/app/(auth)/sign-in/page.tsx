@@ -14,7 +14,7 @@ import {
   LoginCredentialsValidator,
   TLoginCredentialsValidator
 } from '@/lib/validators/auth-credentials-validator';
-import { signIn, useSession } from 'next-auth/react';
+import { signIn } from 'next-auth/react';
 
 import { toast } from 'sonner';
 
