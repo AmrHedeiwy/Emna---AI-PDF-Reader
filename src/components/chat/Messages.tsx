@@ -10,7 +10,7 @@ import Message from './Message';
 import { useIntersection } from '@mantine/hooks';
 
 const Messages = ({ fileId }: { fileId: string }) => {
-  const { isLoading: isAiThinking } = useContext(ChatContext);
+  const { isAIThinking, isAIStreaming } = useContext(ChatContext);
 
   const { data, fetchNextPage, isLoading } =
     trpc.dashboard.getFileMessages.useInfiniteQuery(
@@ -34,7 +34,7 @@ const Messages = ({ fileId }: { fileId: string }) => {
   };
 
   const combinedMessages = [
-    ...(isAiThinking ? [loadingMessage] : []),
+    ...(isAIThinking ? [loadingMessage] : []),
     ...(messages ?? [])
   ];
 
@@ -48,8 +48,8 @@ const Messages = ({ fileId }: { fileId: string }) => {
 
   const bottomRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    if (isAiThinking) bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [isAiThinking, bottomRef]);
+    if (isAIThinking) bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [isAIThinking, bottomRef]);
 
   return (
     <div className="flex-1 flex flex-col-reverse py-4 p-3 max-h-[calc(100vh-9.2rem)] overflow-y-auto overflow-x-hidden border-zinc-200 scrollable-content">

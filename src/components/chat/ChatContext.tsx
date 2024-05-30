@@ -9,14 +9,16 @@ export type TChatContext = {
   addMessage: () => void;
   message: string;
   handleInputChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  isLoading: boolean;
+  isAIThinking: boolean;
+  isAIStreaming: boolean;
 };
 
 export const ChatContext = createContext<TChatContext>({
   addMessage: () => {},
   message: '',
   handleInputChange: () => {},
-  isLoading: false
+  isAIThinking: false,
+  isAIStreaming: false
 });
 
 interface ChatProps {
@@ -31,7 +33,7 @@ export const ChatProvider = ({ fileId, children }: ChatProps) => {
   const backupMessage = useRef<string>('');
   const dashboardCtx = trpc.useUtils().dashboard;
 
-  const { mutate: sendMessage } = useMutation({
+  const { mutate: sendMessage, isPending } = useMutation({
     mutationFn: async ({ message }: { message: string }) => {
       const res = await fetch('/api/message', {
         method: 'POST',
@@ -160,7 +162,8 @@ export const ChatProvider = ({ fileId, children }: ChatProps) => {
         message,
         addMessage: () => sendMessage({ message }),
         handleInputChange,
-        isLoading
+        isAIThinking: isLoading,
+        isAIStreaming: isPending
       }}
     >
       {children}

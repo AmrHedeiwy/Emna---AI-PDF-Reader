@@ -7,7 +7,8 @@ import { useContext, useRef } from 'react';
 import { ChatContext } from './ChatContext';
 
 const ChatInput = ({ isDisabled }: { isDisabled?: boolean }) => {
-  const { handleInputChange, addMessage, message, isLoading } = useContext(ChatContext);
+  const { handleInputChange, addMessage, message, isAIThinking, isAIStreaming } =
+    useContext(ChatContext);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
   return (
@@ -45,7 +46,7 @@ const ChatInput = ({ isDisabled }: { isDisabled?: boolean }) => {
 
                 textAreaRef.current?.focus();
               }}
-              disabled={isDisabled || isLoading}
+              disabled={isDisabled || isAIThinking || isAIStreaming}
               className="absolute right-2 bottom-1"
               aria-label="send message"
             >
