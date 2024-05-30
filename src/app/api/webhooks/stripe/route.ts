@@ -1,9 +1,7 @@
-import { indexFile, pinecone } from '@/lib/pinecone';
+import { indexFile } from '@/lib/pinecone';
 import prisma from '@/lib/prismadb';
-import { getUserSubscriptionPlan, stripe } from '@/lib/stripe';
-import { PDFLoader } from '@langchain/community/document_loaders/fs/pdf';
+import { stripe } from '@/lib/stripe';
 import { headers } from 'next/headers';
-import { OpenAIEmbeddings } from '@langchain/openai';
 import Stripe from 'stripe';
 
 export async function POST(req: Request) {
@@ -12,7 +10,7 @@ export async function POST(req: Request) {
 
   let event: Stripe.Event;
 
-  console.log(signature, body);
+  console.log('sig: ' + signature);
   try {
     event = stripe.webhooks.constructEvent(
       body,
