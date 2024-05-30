@@ -1,7 +1,7 @@
 'use client';
 
 import { trpc } from '@/app/_trpc/client';
-import { getUserSubscriptionPlan } from '@/lib/stripe';
+import { TGetUserSubscriptionPlan } from '@/lib/stripe';
 import { toast } from 'sonner';
 import MaxWidthWrapper from './MaxWidthWrapper';
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from './ui/card';
@@ -12,7 +12,7 @@ import { format } from 'util';
 const BillingForm = ({
   subsciptionPlan
 }: {
-  subsciptionPlan: Awaited<ReturnType<typeof getUserSubscriptionPlan>>;
+  subsciptionPlan: TGetUserSubscriptionPlan;
 }) => {
   const { mutate: createStripeSession, isPending } =
     trpc.dashboard.createStripeSession.useMutation({

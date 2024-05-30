@@ -1,6 +1,9 @@
+import { indexFile, pinecone } from '@/lib/pinecone';
 import prisma from '@/lib/prismadb';
-import { stripe } from '@/lib/stripe';
+import { getUserSubscriptionPlan, stripe } from '@/lib/stripe';
+import { PDFLoader } from '@langchain/community/document_loaders/fs/pdf';
 import { headers } from 'next/headers';
+import { OpenAIEmbeddings } from '@langchain/openai';
 import Stripe from 'stripe';
 
 export async function POST(req: Request) {
@@ -52,6 +55,27 @@ export async function POST(req: Request) {
         stripeCurrentPeriodEnd: new Date(subscription.current_period_end * 1000)
       }
     });
+  }
+
+  if (
+    event.type === 'checkout.session.completed' ||
+    event.type === 'invoice.payment_succeeded'
+  ) {
+    const failedFiles = await prisma.file.findMany({
+      where: { userId: session.metadata.userId, uploadStatus: 'FAILED' },
+      select: { id: true, url: true }
+    });
+
+    for (const { id, url } of failedFiles) {
+      try {
+        await indexFile(url, id);
+
+        await prisma.file.update({
+          where: { id },
+          data: { uploadStatus: 'SUCCESS' }
+        });
+      } catch (error) {}
+    }
   }
 
   return new Response(null, { status: 200 });

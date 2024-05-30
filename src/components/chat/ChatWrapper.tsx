@@ -7,6 +7,7 @@ import { ChevronLeft, Loader2, XCircleIcon } from 'lucide-react';
 import Link from 'next/link';
 import { buttonVariants } from '../ui/button';
 import { ChatContext, ChatProvider } from './ChatContext';
+import { useEffect, useRef } from 'react';
 
 const ChatWrapper = ({ fileId }: { fileId: string }) => {
   const { data, isLoading } = trpc.dashboard.getFileUploadStatus.useQuery(

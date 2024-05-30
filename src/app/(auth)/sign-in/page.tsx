@@ -19,6 +19,7 @@ import { signIn } from 'next-auth/react';
 import { toast } from 'sonner';
 
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
 
 const Page = () => {
   const router = useRouter();
@@ -122,7 +123,7 @@ const Page = () => {
             <Button
               className="flex w-full"
               disabled={isLoading}
-              onClick={() => signIn('google')}
+              onClick={() => signIn('google', { redirect: false })}
             >
               <Google className="w-5 h-5 mr-2" /> Google
             </Button>

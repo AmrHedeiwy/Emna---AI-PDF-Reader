@@ -64,7 +64,7 @@ const Page = () => {
           <Logo className="w-24 h-24" />
           <h1 className="text-2xl font-bold">Create an account</h1>
           <Link
-            href="/sign-up"
+            href="/sign-in"
             className={buttonVariants({
               variant: 'link',
               className: 'group'
@@ -141,7 +141,7 @@ const Page = () => {
             <Button
               className="flex w-full"
               disabled={isLoading}
-              onClick={() => signIn('google')}
+              onClick={() => signIn('google', { redirect: false })}
             >
               <Google className="w-5 h-5 mr-2" /> Google
             </Button>

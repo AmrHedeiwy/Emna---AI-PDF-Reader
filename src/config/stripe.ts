@@ -3,7 +3,7 @@ export const PLANS = [
     name: 'Free',
     slug: 'free',
     quota: 10,
-    pagesPerPdf: 5,
+    pagesPerPdf: 2,
     price: {
       amount: 0,
       priceIds: {
@@ -27,4 +27,4 @@ export const PLANS = [
   }
 ];
 
-export type TPLANS = (typeof PLANS)[number] | null | undefined;
+export type TPLANS = (typeof PLANS)[number];

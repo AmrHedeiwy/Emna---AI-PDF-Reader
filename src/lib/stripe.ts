@@ -53,10 +53,14 @@ export async function getUserSubscriptionPlan() {
     currentPlan.isCanceled = stripePlan.cancel_at_period_end;
   }
 
-  currentPlan.plan = plan;
+  currentPlan.plan = plan ?? PLANS[0];
   currentPlan.stripeCustomerId = user.stripeCustomerId;
   currentPlan.stripeSubscriptionId = user.stripeSubscriptionId;
   currentPlan.stripeCurrentPeriodEnd = user.stripeCurrentPeriodEnd;
 
   return currentPlan;
 }
+
+export type TGetUserSubscriptionPlan = Awaited<
+  ReturnType<typeof getUserSubscriptionPlan>
+>;

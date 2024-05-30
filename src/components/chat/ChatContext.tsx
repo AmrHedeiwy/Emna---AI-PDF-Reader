@@ -53,42 +53,40 @@ export const ChatProvider = ({ fileId, children }: ChatProps) => {
 
       let prevState: any = null;
 
-      dashboardCtx.getFileMessages.setInfiniteData(
-        { fileId, limit: INFINITE_QUERY_LIMIT },
-        (prevData: any) => {
-          prevState = prevData;
-          const newMsgObj = {
-            id: crypto.randomUUID(),
-            content: message,
-            createdAt: new Date().toISOString(),
-            isUserMessage: true
-          };
-          if (!prevData || !prevData.pages || prevData.pages.length === 0)
-            return {
-              pages: [
-                {
-                  messages: [newMsgObj]
-                }
-              ],
-              pageParams: []
-            };
-
-          const newData = [...prevData.pages];
-
-          newData[0] = {
-            ...newData[0],
-            messages: [newMsgObj, ...newData[0].messages]
+      dashboardCtx.getFileMessages.setInfiniteData({ fileId }, (prevData: any) => {
+        prevState = prevData;
+        const newMsgObj = {
+          id: crypto.randomUUID(),
+          content: message,
+          createdAt: new Date().toISOString(),
+          isUserMessage: true
+        };
+        if (!prevData || !prevData.pages || prevData.pages.length === 0)
+          return {
+            pages: [
+              {
+                messages: [newMsgObj]
+              }
+            ],
+            pageParams: []
           };
 
-          return { ...prevData, pages: newData };
-        }
-      );
+        const newData = [...prevData.pages];
+
+        newData[0] = {
+          ...newData[0],
+          messages: [newMsgObj, ...newData[0].messages]
+        };
+
+        return { ...prevData, pages: newData };
+      });
 
       setIsLoading(true);
 
       return { prevState };
     },
     onSuccess: async (stream) => {
+      setIsLoading(false);
       if (!stream)
         return toast.error(
           'There was a problem sending this message. Please refresh this page and try again.'
@@ -141,18 +139,19 @@ export const ChatProvider = ({ fileId, children }: ChatProps) => {
     },
     onError: (_, __, ctx) => {
       setMessage(backupMessage.current);
-      dashboardCtx.getFileMessages.setInfiniteData(
-        { fileId, limit: INFINITE_QUERY_LIMIT },
-        ctx?.prevState
-      );
+      dashboardCtx.getFileMessages.setInfiniteData({ fileId }, ctx?.prevState);
     },
-    onSettled: () => {
+    onSettled: async () => {
       setIsLoading(false);
+
+      await dashboardCtx.getFileMessages.invalidate({
+        fileId
+      });
     }
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setMessage(e.target.value.trim());
+    setMessage(e.target.value);
   };
 
   return (

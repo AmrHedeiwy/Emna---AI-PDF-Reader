@@ -4,7 +4,6 @@ import { getUserSubscriptionPlan } from '@/lib/stripe';
 const Page = async () => {
   const subsciptionPlan = await getUserSubscriptionPlan();
 
-  console.log(subsciptionPlan);
   return <BillingForm subsciptionPlan={subsciptionPlan} />;
 };
 

@@ -21,7 +21,8 @@ const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      allowDangerousEmailAccountLinking: true
     }),
     CredentialsProvider({
       name: 'credentials',
@@ -49,6 +50,10 @@ const authOptions: NextAuthOptions = {
       }
     })
   ],
+  pages: {
+    error: '/sign-in',
+    signIn: '/sign-in'
+  },
   callbacks: {
     jwt({ token, user }) {
       if (!!user) {
@@ -65,7 +70,8 @@ const authOptions: NextAuthOptions = {
       return session;
     }
   },
-  debug: process.env.NODE_ENV === 'development',
+
+  // debug: process.env.NODE_ENV === 'development',
   secret: process.env.NEXTAUTH_SECRET,
   session: { strategy: 'jwt' }
 };

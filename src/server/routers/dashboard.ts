@@ -23,7 +23,7 @@ const dashboardRouter = router({
 
       if (!file) throw new TRPCError({ code: 'NOT_FOUND' });
 
-      await prisma.file.delete({ where: { id: input.id } });
+      await prisma.file.delete({ where: { id: input.id }, include: { messages: true } });
 
       return { deleted: true };
     }),

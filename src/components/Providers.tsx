@@ -8,6 +8,7 @@ import { httpBatchLink } from '@trpc/client';
 import { trpc } from '@/app/_trpc/client';
 import { absoluteUrl } from '@/lib/utils';
 import { SessionProvider } from 'next-auth/react';
+import NavProvider from './nav/NavProvider';
 
 const Providers = ({ children }: PropsWithChildren) => {
   const [queryClient] = useState(() => new QueryClient());
@@ -27,7 +28,9 @@ const Providers = ({ children }: PropsWithChildren) => {
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
-        <SessionProvider>{children}</SessionProvider>
+        <SessionProvider>
+          <NavProvider>{children}</NavProvider>
+        </SessionProvider>
       </QueryClientProvider>
     </trpc.Provider>
   );
