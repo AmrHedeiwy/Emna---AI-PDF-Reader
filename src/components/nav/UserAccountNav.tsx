@@ -10,13 +10,13 @@ import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Gem, User } from 'lucide-react';
 import Link from 'next/link';
 import SignOutButton from '../SignOutButton';
-import { TGetUserSubscriptionPlan } from '@/lib/stripe';
+import { TGetUserSubscription } from '@/lib/stripe';
 
 interface UserAccountNavProps {
   email: string | null | undefined;
   name: string | null | undefined;
   imageUrl: string | null | undefined;
-  subscription: TGetUserSubscriptionPlan;
+  subscription: TGetUserSubscription;
 }
 
 const UserAccountNav = async ({

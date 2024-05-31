@@ -7,11 +7,11 @@ import { buttonVariants } from '../ui/button';
 import NavMenuToggle from './NavMenuToggle';
 import NavLogo from './NavLogo';
 import UserAccountNav from './UserAccountNav';
-import { getUserSubscriptionPlan } from '@/lib/stripe';
+import { getUserSubscription } from '@/lib/stripe';
 
 const Navbar = async () => {
   const session = await getServerSession(authOptions);
-  const subscription = await getUserSubscriptionPlan();
+  const subscription = await getUserSubscription();
 
   return (
     <>

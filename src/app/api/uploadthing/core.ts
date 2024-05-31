@@ -1,5 +1,6 @@
 import { indexFile } from '@/lib/pinecone';
 import prisma from '@/lib/prismadb';
+import { getUserSubscription } from '@/lib/stripe';
 
 import authOptions from '@/server/authOptions';
 import { getServerSession } from 'next-auth';
@@ -16,7 +17,7 @@ export const ourFileRouter = {
 
       if (!session || !session.user.id) throw new UploadThingError('Unauthorized');
 
-      return { userId: session.user.id };
+      return { userId: session.user.id, subscription: await getUserSubscription() };
     })
     .onUploadComplete(async ({ metadata, file }) => {
       const isFileExist = !!(await prisma.file.findFirst({ where: { key: file.key } }));
@@ -34,7 +35,7 @@ export const ourFileRouter = {
       });
 
       try {
-        await indexFile(createdFile.url, createdFile.id);
+        await indexFile(createdFile.url, createdFile.id, metadata.subscription);
 
         await prisma.file.update({
           where: { id: createdFile.id },

@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { TRPCError } from '@trpc/server';
 import { INFINITE_QUERY_LIMIT } from '@/config/infinite-query';
 import { absoluteUrl } from '@/lib/utils';
-import { getUserSubscriptionPlan, stripe } from '@/lib/stripe';
+import { getUserSubscription, stripe } from '@/lib/stripe';
 import { PLANS } from '@/config/stripe';
 
 const dashboardRouter = router({
@@ -58,7 +58,7 @@ const dashboardRouter = router({
     if (!user) throw new TRPCError({ code: 'UNAUTHORIZED' });
 
     try {
-      const subscriptionPlan = await getUserSubscriptionPlan();
+      const subscriptionPlan = await getUserSubscription();
 
       if (subscriptionPlan.isSubscribed) {
         const stripeSession = await stripe.billingPortal.sessions.create({

@@ -3,7 +3,7 @@ import prisma from '@/lib/prismadb';
 import { headers } from 'next/headers';
 import Stripe from 'stripe';
 import { NextRequest } from 'next/server';
-import { stripe } from '@/lib/stripe';
+import { getUserSubscription, stripe } from '@/lib/stripe';
 
 export async function POST(req: NextRequest) {
   const body = await req.text();
@@ -68,8 +68,7 @@ export async function POST(req: NextRequest) {
 
     for (const { id, url } of failedFiles) {
       try {
-        console.log('indexing file: ' + id + ' ' + url);
-        await indexFile(url, id);
+        await indexFile(url, id, await getUserSubscription(session.metadata.userId));
 
         await prisma.file.update({
           where: { id },

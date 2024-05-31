@@ -18,8 +18,8 @@ type TCurrentPlan = {
   stripeCustomerId: string | null;
 };
 
-export async function getUserSubscriptionPlan() {
-  const session = await getServerSession(authOptions);
+export async function getUserSubscription(userId?: string) {
+  const session = userId ? { user: { id: userId } } : await getServerSession(authOptions);
 
   const currentPlan: TCurrentPlan = {
     plan: { ...PLANS[0] },
@@ -62,6 +62,4 @@ export async function getUserSubscriptionPlan() {
   return currentPlan;
 }
 
-export type TGetUserSubscriptionPlan = Awaited<
-  ReturnType<typeof getUserSubscriptionPlan>
->;
+export type TGetUserSubscription = Awaited<ReturnType<typeof getUserSubscription>>;
