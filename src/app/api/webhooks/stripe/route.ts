@@ -1,15 +1,13 @@
 import { indexFile } from '@/lib/pinecone';
 import prisma from '@/lib/prismadb';
-import { stripe } from '@/lib/stripe';
 import { headers } from 'next/headers';
-import { buffer } from 'micro';
 import Stripe from 'stripe';
-import { NextApiRequest } from 'next';
+import { NextRequest } from 'next/server';
+import { stripe } from '@/lib/stripe';
 
-export async function POST(req: NextApiRequest) {
-  const buf = await buffer(req);
-  const body = buf.toString('utf-8');
-  const signature = req.headers['stripe-signature'] as string;
+export async function POST(req: NextRequest) {
+  const body = await req.text();
+  const signature = headers().get('stripe-signature') as string;
 
   let event: Stripe.Event;
 
