@@ -7,7 +7,6 @@ import SignOutButton from '../SignOutButton';
 import { useContext } from 'react';
 import { NavContext } from './NavProvider';
 import { TGetUserSubscription } from '@/lib/stripe';
-import { Gem } from 'lucide-react';
 
 const MobileNav = ({
   isAuth,

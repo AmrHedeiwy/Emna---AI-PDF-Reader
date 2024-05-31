@@ -10,7 +10,7 @@ import Message from './Message';
 import { useIntersection } from '@mantine/hooks';
 
 const Messages = ({ fileId }: { fileId: string }) => {
-  const { isAIThinking, isAIStreaming } = useContext(ChatContext);
+  const { isAIThinking } = useContext(ChatContext);
 
   const { data, fetchNextPage, isLoading } =
     trpc.dashboard.getFileMessages.useInfiniteQuery(

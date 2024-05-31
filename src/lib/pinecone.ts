@@ -20,9 +20,9 @@ export const indexFile = async (
 
   const loader = new PDFLoader(blob);
 
-  const docs = await loader.load();
+  const doc = await loader.load();
 
-  const numOfPages = docs.length;
+  const numOfPages = doc.length;
 
   if (numOfPages > subscription.plan.pagesPerPdf) throw new Error('Exceeded page limit');
 
@@ -33,7 +33,7 @@ export const indexFile = async (
     model: 'text-embedding-3-small'
   });
 
-  await PineconeStore.fromDocuments(docs, embeddings, {
+  await PineconeStore.fromDocuments(doc, embeddings, {
     pineconeIndex,
     namespace: id
   });

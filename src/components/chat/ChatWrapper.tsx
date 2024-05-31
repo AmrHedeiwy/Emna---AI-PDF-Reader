@@ -6,10 +6,16 @@ import Messages from './Messages';
 import { ChevronLeft, Loader2, XCircleIcon } from 'lucide-react';
 import Link from 'next/link';
 import { buttonVariants } from '../ui/button';
-import { ChatContext, ChatProvider } from './ChatContext';
-import { useEffect, useRef } from 'react';
+import { ChatProvider } from './ChatContext';
+import { TGetUserSubscription } from '@/lib/stripe';
 
-const ChatWrapper = ({ fileId }: { fileId: string }) => {
+const ChatWrapper = ({
+  fileId,
+  isSubscribed
+}: {
+  fileId: string;
+  isSubscribed: boolean;
+}) => {
   const { data, isLoading } = trpc.dashboard.getFileUploadStatus.useQuery(
     { id: fileId },
     {
@@ -38,7 +44,8 @@ const ChatWrapper = ({ fileId }: { fileId: string }) => {
             <p className="text-sm text-muted-foreground">
               {(isLoading || data?.status === 'PENDING') && "We're preparing your PDF."}
               {data?.status === 'PROCESSING' && "This won't take long."}
-              {data?.status === 'FAILED' && `Your plan supports up to x pages per PDF.`}
+              {data?.status === 'FAILED' &&
+                `Your plan supports up to ${isSubscribed ? '25' : '10'} pages per PDF.`}
             </p>
 
             {data?.status === 'FAILED' && (

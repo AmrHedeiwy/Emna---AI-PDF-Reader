@@ -40,7 +40,7 @@ const BillingForm = ({ subscription }: { subscription: TGetUserSubscription }) =
           </CardHeader>
 
           <CardFooter className="flex flex-col items-start space-y-6 md:space-y-2 md:flex-row md:justify-between md">
-            <Button type="submit">
+            <Button type="submit" disabled={isPending}>
               {isPending && <Loader2 className="w-4 h-4 mr-4 animate-spin" />}
               {subscription.isSubscribed ? 'Manage Subscription' : 'Upgrade to PRO'}
             </Button>

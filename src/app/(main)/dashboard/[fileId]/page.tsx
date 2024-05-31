@@ -2,6 +2,7 @@ import ChatWrapper from '@/components/chat/ChatWrapper';
 import PdfRenderer from '@/components/PdfRenderer';
 
 import prisma from '@/lib/prismadb';
+import { getUserSubscription } from '@/lib/stripe';
 import authOptions from '@/server/authOptions';
 import { getServerSession } from 'next-auth';
 import { notFound } from 'next/navigation';
@@ -19,6 +20,8 @@ const Page = async ({ params }: PageProps) => {
     where: { id: params.fileId, userId: session?.user.id }
   });
 
+  const subscription = await getUserSubscription();
+
   if (!file) return notFound();
 
   return (
@@ -30,7 +33,7 @@ const Page = async ({ params }: PageProps) => {
           </div>
         </div>
         <div className="shrink-0 flex-[0.75] border-t border-gray-200 lg:border-l lg:border-t-0">
-          <ChatWrapper fileId={params.fileId} />
+          <ChatWrapper isSubscribed={subscription.isSubscribed} fileId={params.fileId} />
         </div>
       </div>
     </div>

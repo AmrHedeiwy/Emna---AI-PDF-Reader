@@ -11,8 +11,9 @@ import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { trpc } from '@/app/_trpc/client';
+import { getUserSubscription } from '@/lib/stripe';
 
-const UploadButton = () => {
+const UploadButton = ({ isSubscribed }: { isSubscribed: boolean }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   return (
@@ -28,16 +29,19 @@ const UploadButton = () => {
         <Button>Upload PDF</Button>
       </DialogTrigger>
       <DialogContent>
-        <UploadDropzone />
+        <UploadDropzone isSubscribed={isSubscribed} />
       </DialogContent>
     </Dialog>
   );
 };
 
-const UploadDropzone = () => {
-  const { startUpload, isUploading } = useUploadThing('pdfUploader', {
-    skipPolling: true
-  });
+const UploadDropzone = ({ isSubscribed }: { isSubscribed: boolean }) => {
+  const { startUpload, isUploading } = useUploadThing(
+    isSubscribed ? 'proPlanUploader' : 'freePlanUploader',
+    {
+      skipPolling: true
+    }
+  );
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const router = useRouter();
 
@@ -87,7 +91,9 @@ const UploadDropzone = () => {
               <p className="text-sm text-zinc-700 mb-2">
                 <span className="font-semibold">Click to upload</span> or drag and drop.
               </p>
-              <p className="text-xs text-muted-foreground">PDF up to (4MB)</p>
+              <p className="text-xs text-muted-foreground">
+                PDF up to ({isSubscribed ? '4' : '16'}MB)
+              </p>
             </div>
 
             {acceptedFiles && acceptedFiles[0] && (
