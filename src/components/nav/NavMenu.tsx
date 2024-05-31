@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 import SignOutButton from '../SignOutButton';
 import { useContext } from 'react';
 import { NavContext } from './NavProvider';
-import { TGetUserSubscriptionPlan } from '@/lib/stripe';
+import { TGetUserSubscription } from '@/lib/stripe';
 import { Gem } from 'lucide-react';
 
 const MobileNav = ({
@@ -14,7 +14,7 @@ const MobileNav = ({
   subscription
 }: {
   isAuth: boolean;
-  subscription: TGetUserSubscriptionPlan;
+  subscription: TGetUserSubscription;
 }) => {
   const pathname = usePathname();
   const { toggleNav } = useContext(NavContext);
