@@ -53,6 +53,7 @@ export async function getUserSubscriptionPlan() {
     currentPlan.isCanceled = stripePlan.cancel_at_period_end;
   }
 
+  currentPlan.isSubscribed = isSubscribed;
   currentPlan.plan = plan ?? PLANS[0];
   currentPlan.stripeCustomerId = user.stripeCustomerId;
   currentPlan.stripeSubscriptionId = user.stripeSubscriptionId;

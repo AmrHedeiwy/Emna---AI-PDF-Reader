@@ -66,6 +66,7 @@ export async function POST(req: NextRequest) {
       select: { id: true, url: true }
     });
 
+    console.log('failedFiles: ' + failedFiles);
     for (const { id, url } of failedFiles) {
       try {
         await indexFile(url, id);
@@ -74,7 +75,9 @@ export async function POST(req: NextRequest) {
           where: { id },
           data: { uploadStatus: 'SUCCESS' }
         });
-      } catch (error) {}
+      } catch (error) {
+        console.log('error fro' + error);
+      }
     }
   }
 

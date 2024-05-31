@@ -7,12 +7,12 @@ import MaxWidthWrapper from './MaxWidthWrapper';
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
 import { Loader2 } from 'lucide-react';
-import { format } from 'util';
+import { format } from 'date-fns';
 
 const BillingForm = ({
-  subsciptionPlan
+  subscriptionPlan
 }: {
-  subsciptionPlan: TGetUserSubscriptionPlan;
+  subscriptionPlan: TGetUserSubscriptionPlan;
 }) => {
   const { mutate: createStripeSession, isPending } =
     trpc.dashboard.createStripeSession.useMutation({
@@ -39,22 +39,23 @@ const BillingForm = ({
           <CardHeader>
             <CardTitle>Subscription Plan</CardTitle>
             <CardDescription>
-              You are currently on the <strong>{subsciptionPlan.plan?.name}</strong> plan.
+              You are currently on the <strong>{subscriptionPlan.plan?.name}</strong>{' '}
+              plan.
             </CardDescription>
           </CardHeader>
 
-          <CardFooter className="flex flex-col items-start space-y-2 md:flex-row md:justify-between md">
+          <CardFooter className="flex flex-col items-start space-y-6 md:space-y-2 md:flex-row md:justify-between md">
             <Button type="submit">
               {isPending && <Loader2 className="w-4 h-4 mr-4 animate-spin" />}
-              {subsciptionPlan.isSubscribed ? 'Manage Subscription' : 'Upgrade to PRO'}
+              {subscriptionPlan.isSubscribed ? 'Manage Subscription' : 'Upgrade to PRO'}
             </Button>
 
-            {subsciptionPlan.isSubscribed && (
-              <p className="bg-gray-100 rounded-full text-sm font-medium text-zinc-800">
-                {subsciptionPlan.isCanceled
+            {subscriptionPlan.isSubscribed && (
+              <p className="text-sm py-1 px-2 font-medium text-muted-foreground">
+                {subscriptionPlan.isCanceled
                   ? 'Your plan will be canceled on'
                   : 'Your plan renews on'}{' '}
-                {format(subsciptionPlan.stripeCurrentPeriodEnd!, 'dd.MM.yyy')}
+                {format(subscriptionPlan.stripeCurrentPeriodEnd!, 'dd.MM.yyyy')}
               </p>
             )}
           </CardFooter>
