@@ -1,4 +1,3 @@
-import { getUserSubscriptionPlan } from '@/lib/stripe';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,7 +9,6 @@ import { Button } from '../ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Gem, User } from 'lucide-react';
 import Link from 'next/link';
-import { signOut } from 'next-auth/react';
 import SignOutButton from '../SignOutButton';
 import { TGetUserSubscriptionPlan } from '@/lib/stripe';
 

@@ -21,6 +21,7 @@ export const indexFile = async (url: string, id: string) => {
   const numOfPages = docs.length;
   const currentPlan = await getUserSubscriptionPlan();
 
+  console.log(currentPlan.plan.pagesPerPdf, numOfPages);
   if (numOfPages > currentPlan.plan.pagesPerPdf) throw new Error('Exceeded page limit');
 
   const pineconeIndex = pinecone.Index('emna');

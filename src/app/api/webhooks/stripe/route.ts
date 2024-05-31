@@ -66,9 +66,9 @@ export async function POST(req: NextRequest) {
       select: { id: true, url: true }
     });
 
-    console.log('failedFiles: ' + failedFiles);
     for (const { id, url } of failedFiles) {
       try {
+        console.log('indexing file: ' + id + ' ' + url);
         await indexFile(url, id);
 
         await prisma.file.update({
