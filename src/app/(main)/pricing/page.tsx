@@ -26,7 +26,7 @@ const pricingItems = [
         footnote: 'The maximum amount of pages per PDF-file.'
       },
       {
-        text: '4MB file size limit',
+        text: '16MB file size limit',
         footnote: 'The maximum file size of a single PDF file.'
       },
       {
@@ -49,7 +49,7 @@ const pricingItems = [
         footnote: 'The maximum amount of pages per PDF-file.'
       },
       {
-        text: '16MB file size limit',
+        text: '32MB file size limit',
         footnote: 'The maximum file size of a single PDF file.'
       },
       {

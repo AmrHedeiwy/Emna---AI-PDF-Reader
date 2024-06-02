@@ -63,6 +63,7 @@ const UploadDropzone = ({ isSubscribed }: { isSubscribed: boolean }) => {
       onDrop={async (acceptedFile) => {
         const res = await startUpload(acceptedFile);
 
+        console.log(res);
         if (!res) return toast.error('Something went wrong!');
 
         const [{ key }] = res;
