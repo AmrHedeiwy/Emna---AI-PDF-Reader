@@ -25,7 +25,7 @@ const Dashboard = ({ subscription }: { subscription: TGetUserSubscription }) => 
       </div>
 
       {files && files?.length !== 0 && (
-        <ul className="mt-8 grid gap-6 divide-y divide-zinc-200 md:grid-cols-2 lg:grid-cols-3 overflow-hidden">
+        <ul className="group mt-8 grid gap-6 divide-y divide-zinc-200 md:grid-cols-2 lg:grid-cols-3">
           {files.map((file) => (
             <li
               key={file.id}
