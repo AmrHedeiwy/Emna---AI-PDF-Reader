@@ -17,7 +17,7 @@ const Messages = ({ fileId }: { fileId: string }) => {
       { fileId },
       {
         getNextPageParam: (lastPage) => lastPage.nextCursor,
-        enabled: !isAIStreaming && !isAIThinking
+        enabled: !isAIStreaming || !isAIThinking
       }
     );
 
