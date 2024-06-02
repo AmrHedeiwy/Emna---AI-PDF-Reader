@@ -72,7 +72,16 @@ const MobileNav = ({
               Dashboard
             </Link>
             {subscription.isSubscribed ? (
-              <Link href="/dashboard/billing">Manege Subscription</Link>
+              <Link
+                href="/dashboard/billing"
+                onClick={() => toggleNav()}
+                className={cn(
+                  'text-muted-foreground',
+                  pathname === '/dashboard/billing' && 'font-semibold text-green-500'
+                )}
+              >
+                Manege Subscription
+              </Link>
             ) : (
               <Link
                 href="/pricing"

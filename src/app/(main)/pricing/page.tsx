@@ -22,7 +22,7 @@ const pricingItems = [
     price: PLANS.find((p) => p.slug === 'free')!.price.amount,
     features: [
       {
-        text: '5 pages per PDF',
+        text: '10 pages per PDF',
         footnote: 'The maximum amount of pages per PDF-file.'
       },
       {
@@ -33,13 +33,8 @@ const pricingItems = [
         text: 'Mobile-friendly interface'
       },
       {
-        text: 'Higher-quality responses',
-        footnote: 'Better algorithmic responses for enhanced content quality',
-        negative: true
-      },
-      {
-        text: 'Priority support',
-        negative: true
+        text: 'GPT-4 powered responses',
+        footnote: 'Access to GPT-4 for generating responses with basic quality.'
       }
     ]
   },
@@ -61,11 +56,8 @@ const pricingItems = [
         text: 'Mobile-friendly interface'
       },
       {
-        text: 'Higher-quality responses',
-        footnote: 'Better algorithmic responses for enhanced content quality'
-      },
-      {
-        text: 'Priority support'
+        text: 'GPT-4o powered responses',
+        footnote: 'Enhanced GPT-4o for higher-quality responses.'
       }
     ]
   }
@@ -119,20 +111,14 @@ const Page = async () => {
                 </div>
 
                 <ul className="my-10 space-y-5 px-8">
-                  {features.map(({ text, footnote, negative }, i) => (
+                  {features.map(({ text, footnote }, i) => (
                     <li key={i} className="flex space-x-5">
                       <div className="flex-shrink-0">
-                        {negative ? (
-                          <Minus className="h-6 w-6 text-zinc-200" />
-                        ) : (
-                          <Check className={cn('h-6 w-6 text-green-500')} />
-                        )}
+                        <Check className={cn('h-6 w-6 text-green-500')} />
                       </div>
 
                       <div className="flex items-center">
-                        <p className={cn('text-sm', negative && 'text-zinc-400')}>
-                          {text}
-                        </p>
+                        <p className="text-sm">{text}</p>
 
                         {!!footnote && (
                           <Tooltip delayDuration={300}>
@@ -150,19 +136,7 @@ const Page = async () => {
                 </ul>
 
                 <div className="w-full p-5">
-                  {plan === 'Pro' &&
-                    (session?.user ? (
-                      <UpgradeButton />
-                    ) : (
-                      <Link
-                        href="/sign-in"
-                        className={buttonVariants({
-                          className: 'w-full'
-                        })}
-                      >
-                        Sign Up &rarr;
-                      </Link>
-                    ))}
+                  {plan === 'Pro' && <UpgradeButton />}
 
                   {plan === 'Free' && (
                     <Link

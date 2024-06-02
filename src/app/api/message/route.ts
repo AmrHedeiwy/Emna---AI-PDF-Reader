@@ -65,7 +65,7 @@ export const POST = async (req: NextRequest) => {
       {
         role: 'system',
         content:
-          "Use the following pieces of context (or previous conversation if needed) to answer the user's question in markdown format. If the question involves generating code, provide a detailed explanation or pseudocode instead."
+          'When responding to user queries related to the PDF file topic, aim to provide comprehensive answers. Utilize the provided context effectively to address any and all questions. Prioritize clarity and accuracy in your responses. Ensure that all responses are relevant to the topic discussed in the PDF file.'
       },
       {
         role: 'user',

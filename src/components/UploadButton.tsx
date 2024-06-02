@@ -11,7 +11,6 @@ import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { trpc } from '@/app/_trpc/client';
-import { getUserSubscription } from '@/lib/stripe';
 
 const UploadButton = ({ isSubscribed }: { isSubscribed: boolean }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);

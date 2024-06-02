@@ -45,8 +45,8 @@ const Dashboard = ({ subscription }: { subscription: TGetUserSubscription }) => 
                 </div>
               </Link>
 
-              <div className="px-6 py-2 mt-4">
-                <div className="grid grid-cols-2 place-items-center gap-6 max-w-xs">
+              <div className="px-6 py-2 mt-4 w-full">
+                <div className="grid grid-cols-2 place-items-center gap-6 max-w-lg lg:max-w-sm mx-auto">
                   <div className="flex items-center gap-2 text-xs text-muted-foreground font-medium">
                     <Plus className="w-4 h-4 text-gray-400 " />
 

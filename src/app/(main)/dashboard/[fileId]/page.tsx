@@ -26,13 +26,13 @@ const Page = async ({ params }: PageProps) => {
 
   return (
     <div className="flex flex-col h-[calc(100vh-3.5rem)] border-t border-gray-200">
-      <div className="mx-auto w-full grow lg:flex xl:px-2">
+      <div className="mx-auto w-full grow xl:flex xl:px-2">
         <div className="flex-1 xl:flex">
           <div className="px-4 py-6 xl:px-6 xl:flex-1">
             <PdfRenderer url={file.url} />
           </div>
         </div>
-        <div className="shrink-0 flex-[0.75] border-t border-gray-200 lg:border-l lg:border-t-0">
+        <div className="shrink-0 flex-[0.50] 2xl:flex-[0.75] border-t border-gray-200 xl:border-l xl:border-t-0">
           <ChatWrapper isSubscribed={subscription.isSubscribed} fileId={params.fileId} />
         </div>
       </div>

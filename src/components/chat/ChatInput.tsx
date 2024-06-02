@@ -13,7 +13,7 @@ const ChatInput = ({ isDisabled }: { isDisabled?: boolean }) => {
 
   return (
     <div className="absolute bottom-0 left-0 w-full">
-      <div className="mx-2 flex md:mx-4 md:mb-2 lg:mx-auto lg:max-w-2xl xl:max-w-3xl">
+      <div className="mx-2 flex md:mx-4 md:mb-2 lg:mx-auto lg:max-w-5xl xl:max-w-3xl">
         <div className="flex flex-1 items-stretch h-full p-4">
           <div className="relative w-full">
             <Textarea
