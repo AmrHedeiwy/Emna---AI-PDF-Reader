@@ -33,8 +33,8 @@ const pricingItems = [
         text: 'Mobile-friendly interface'
       },
       {
-        text: 'GPT-4 powered responses',
-        footnote: 'Access to GPT-4 for generating responses with basic quality.'
+        text: 'GPT-4o powered responses',
+        footnote: 'Access to GPT-4o for generating responses with basic quality.'
       }
     ]
   },
@@ -56,8 +56,7 @@ const pricingItems = [
         text: 'Mobile-friendly interface'
       },
       {
-        text: 'GPT-4o powered responses',
-        footnote: 'Enhanced GPT-4o for higher-quality responses.'
+        text: 'Other features comming soon'
       }
     ]
   }

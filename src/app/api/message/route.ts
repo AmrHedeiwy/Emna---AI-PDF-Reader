@@ -57,7 +57,7 @@ export const POST = async (req: NextRequest) => {
   }));
 
   const res = await openai.chat.completions.create({
-    model: 'gpt-4',
+    model: 'gpt-4o-2024-05-13',
     stream: true,
     temperature: 0,
     user: session.user.id,
@@ -89,6 +89,7 @@ export const POST = async (req: NextRequest) => {
     ]
   });
 
+  // @ts-ignore
   const stream = OpenAIStream(res, {
     async onCompletion(completion) {
       await prisma.message.create({

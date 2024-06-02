@@ -33,6 +33,10 @@ const onUploadComplete = async ({
 
   if (isFileExist) return;
 
+  // const isUserExceedQuota = await prisma.file.count({
+  //   where: { userId: metadata.userId }
+  // }) >= metadata.subscription.plan.quota;
+
   const createdFile = await prisma.file.create({
     data: {
       url: file.url,
