@@ -25,11 +25,11 @@ const Dashboard = ({ subscription }: { subscription: TGetUserSubscription }) => 
       </div>
 
       {files && files?.length !== 0 && (
-        <ul className="mt-8 grid gap-6 divide-y divide-zinc-200 md:grid-cols-2 lg:grid-cols-3">
+        <ul className="mt-8 grid gap-6 divide-y divide-zinc-200 md:grid-cols-2 lg:grid-cols-3 overflow-hidden">
           {files.map((file) => (
             <li
               key={file.id}
-              className="col-span-1 divide-y divide-gray-200 bg-white rounded-lg hover:scale-105 hover:shadow-lg hover:shadow-green-50 transition"
+              className="col-span-1 w-screen md:w-auto divide-y divide-gray-200 bg-white rounded-lg hover:scale-105 hover:shadow-lg hover:shadow-green-50 transition"
             >
               <Link href={`/dashboard/${file.id}`}>
                 <div className="flex space-x-4 p-4">
