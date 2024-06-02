@@ -91,7 +91,7 @@ const UploadDropzone = ({ isSubscribed }: { isSubscribed: boolean }) => {
                 <span className="font-semibold">Click to upload</span> or drag and drop.
               </p>
               <p className="text-xs text-muted-foreground">
-                PDF up to ({isSubscribed ? '4' : '16'}MB)
+                PDF up to ({isSubscribed ? '16' : '4'}MB)
               </p>
             </div>
 
