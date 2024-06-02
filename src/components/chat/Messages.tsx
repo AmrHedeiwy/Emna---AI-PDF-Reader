@@ -10,13 +10,14 @@ import Message from './Message';
 import { useIntersection } from '@mantine/hooks';
 
 const Messages = ({ fileId }: { fileId: string }) => {
-  const { isAIThinking } = useContext(ChatContext);
+  const { isAIThinking, isAIStreaming } = useContext(ChatContext);
 
   const { data, fetchNextPage, isLoading } =
     trpc.dashboard.getFileMessages.useInfiniteQuery(
       { fileId },
       {
-        getNextPageParam: (lastPage) => lastPage.nextCursor
+        getNextPageParam: (lastPage) => lastPage.nextCursor,
+        enabled: !isAIStreaming && !isAIThinking
       }
     );
 
