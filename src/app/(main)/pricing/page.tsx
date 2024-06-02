@@ -22,7 +22,7 @@ const pricingItems = [
     price: PLANS.find((p) => p.slug === 'free')!.price.amount,
     features: [
       {
-        text: '10 pages per PDF',
+        text: '20 pages per PDF',
         footnote: 'The maximum amount of pages per PDF-file.'
       },
       {
