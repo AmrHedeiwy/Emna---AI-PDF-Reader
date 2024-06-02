@@ -97,10 +97,14 @@ export const ChatProvider = ({ fileId, children }: ChatProps) => {
       const reader = stream.getReader();
       const decoder = new TextDecoder();
 
+      let accRes = '';
       while (true) {
         const { value, done } = await reader.read();
-        const chunkVal = decoder.decode(value);
 
+        const chunkVal = decoder.decode(value, { stream: !done });
+
+        console.log(chunkVal);
+        accRes += chunkVal;
         dashboardCtx.getFileMessages.setInfiniteData({ fileId }, (prevData: any) => {
           if (!prevData || !prevData.pages || prevData.pages.length === 0)
             return {
@@ -118,14 +122,14 @@ export const ChatProvider = ({ fileId, children }: ChatProps) => {
               ? [
                   {
                     ...newData[0].messages[0],
-                    content: newData[0].messages[0].content + chunkVal
+                    content: accRes
                   },
                   ...newData[0].messages.slice(1)
                 ]
               : [
                   {
                     id: 'ai-response',
-                    content: chunkVal,
+                    content: accRes,
                     isUserMessage: false,
                     createdAt: new Date().toISOString()
                   },
