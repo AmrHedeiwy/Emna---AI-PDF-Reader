@@ -6,6 +6,12 @@ import ReactMarkdown from 'react-markdown';
 import { format } from 'date-fns';
 import { forwardRef } from 'react';
 
+import rehypeKatex from 'rehype-katex';
+import rehypeHighlight from 'rehype-highlight';
+import remarkMath from 'remark-math';
+import remarkGfm from 'remark-gfm';
+import { codeLanguageSubset } from '@/config/chat';
+
 interface MessageProps {
   message: ExtendedMessage;
   isNextMessageSameSender: boolean;
@@ -48,6 +54,18 @@ const Message = forwardRef<HTMLDivElement, MessageProps>(
           >
             {typeof msg.content === 'string' ? (
               <ReactMarkdown
+                remarkPlugins={[remarkGfm, [remarkMath, {}]]}
+                rehypePlugins={[
+                  rehypeKatex,
+                  [
+                    rehypeHighlight,
+                    {
+                      detect: true,
+                      ignoreMissing: true,
+                      subset: codeLanguageSubset
+                    }
+                  ]
+                ]}
                 className={cn(
                   'prose',
                   msg.isUserMessage ? 'text-white' : 'text-zinc-950'
