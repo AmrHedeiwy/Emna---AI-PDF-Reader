@@ -106,4 +106,4 @@ export const POST = async (req: NextRequest) => {
   return new StreamingTextResponse(stream);
 };
 
-export const maxDuration = 1000 * 60 * 5;
+export const maxDuration = 300;

@@ -127,4 +127,4 @@ export async function POST(req: NextRequest) {
   return new Response(null, { status: 200 });
 }
 
-export const maxDuration = 1000 * 60 * 5;
+export const maxDuration = 300;

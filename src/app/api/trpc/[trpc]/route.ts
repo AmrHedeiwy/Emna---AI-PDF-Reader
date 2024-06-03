@@ -11,4 +11,4 @@ const handler = (req: Request) =>
 
 export { handler as GET, handler as POST };
 
-export const maxDuration = 1000 * 60 * 5;
+export const maxDuration = 300;
