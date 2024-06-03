@@ -11,6 +11,7 @@ import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { trpc } from '@/app/_trpc/client';
+import { Progress } from './ui/progress';
 
 const UploadButton = ({ isSubscribed }: { isSubscribed: boolean }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -35,23 +36,35 @@ const UploadButton = ({ isSubscribed }: { isSubscribed: boolean }) => {
 };
 
 const UploadDropzone = ({ isSubscribed }: { isSubscribed: boolean }) => {
+  const router = useRouter();
+
+  const [progress, setProgress] = useState(0);
+
   const { startUpload, isUploading } = useUploadThing(
     isSubscribed ? 'proPlanUploader' : 'freePlanUploader',
     {
-      skipPolling: true
+      skipPolling: true,
+      onUploadProgress: (num) => setProgress(num),
+      onUploadError: ({ code, message }) => {
+        if (code === 'TOO_LARGE') return toast.error('File too large');
+
+        if (message.includes('InvalidFileType'))
+          return toast.error('Invalid file type', {
+            description: 'Only PDF files are allowed.'
+          });
+        toast.error('Something went wrong', { description: 'Please try again later.' });
+      },
+      onClientUploadComplete: (res) => {
+        if (!res || res.length === 0) return;
+        const [{ key }] = res;
+
+        startPolling({ key });
+      }
     }
   );
-  const [isSuccess, setIsSuccess] = useState<boolean>(false);
-  const router = useRouter();
 
   const { mutate: startPolling } = trpc.dashboard.getFile.useMutation({
-    onSuccess: (file) => {
-      router.push(`/dashboard/${file.id}`);
-
-      const timeout = setTimeout(() => setIsSuccess(false), 2000);
-
-      clearTimeout(timeout);
-    },
+    onSuccess: (file) => router.push(`/dashboard/${file.id}`),
     retry: true,
     retryDelay: 500
   });
@@ -59,21 +72,17 @@ const UploadDropzone = ({ isSubscribed }: { isSubscribed: boolean }) => {
   return (
     <Dropzone
       multiple={false}
-      disabled={isUploading || isSuccess}
-      onDrop={async (acceptedFile) => {
-        const res = await startUpload(acceptedFile);
-
-        console.log(res);
-        if (!res) return toast.error('Something went wrong!');
-
-        const [{ key }] = res;
-
-        if (!key) return toast.error('Something went wrong!');
-
-        setIsSuccess(true);
-
-        startPolling({ key });
-      }}
+      disabled={isUploading || !!progress}
+      maxFiles={1}
+      onDropRejected={() =>
+        toast.error('Too many files', {
+          description: 'Only 1 file can be uploaded.',
+          duration: 5000
+        })
+      }
+      onDrop={async (acceptedFile) =>
+        acceptedFile.length > 0 ? await startUpload(acceptedFile) : null
+      }
     >
       {({ getRootProps, getInputProps, acceptedFiles }) => (
         <div
@@ -83,7 +92,7 @@ const UploadDropzone = ({ isSubscribed }: { isSubscribed: boolean }) => {
           <div
             className={cn(
               'flex flex-col items-center justify-center bg-zinc-50 w-full h-full hover:bg-zinc-100 cursor-pointer',
-              (isUploading || isSuccess) && 'cursor-not-allowed'
+              (isUploading || !!progress) && 'cursor-not-allowed'
             )}
           >
             <div className="flex flex-col items-center justify-center mb-6">
@@ -108,24 +117,30 @@ const UploadDropzone = ({ isSubscribed }: { isSubscribed: boolean }) => {
               </div>
             )}
 
-            {(isUploading || isSuccess) && (
+            {(isUploading || !!progress) && (
               <div className="mt-4 w-full max-w-xs">
-                <div className="border rounded bg-zinc-200 h-1">
-                  <div
-                    className={cn(
-                      'h-full bg-green-500 transition',
-                      isSuccess ? 'scale-100' : 'indeterminate-progress'
-                    )}
-                  />
+                <Progress value={progress} />
+
+                <div className="flex items-center justify-center gap-1 mt-1">
+                  {progress === 0 ? (
+                    <>
+                      <p className="text-xs font-medium text-muted-foreground">
+                        Connecting to the server...
+                      </p>
+                    </>
+                  ) : progress === 100 ? (
+                    <>
+                      <Loader2 className="w-4 h-4 text-zinc-500 animate-spin" />
+                      <span className="text-xs font-medium text-muted-foreground">
+                        Redirecting...
+                      </span>
+                    </>
+                  ) : (
+                    <p className="text-xs font-medium text-muted-foreground">
+                      Uploading {progress}%
+                    </p>
+                  )}
                 </div>
-                {isSuccess && (
-                  <div className="flex items-center justify-center gap-1 mt-1">
-                    <Loader2 className="w-4 h-4 text-zinc-500 animate-spin" />
-                    <span className="text-xs font-medium text-muted-foreground">
-                      Redirecting...
-                    </span>
-                  </div>
-                )}
               </div>
             )}
 
