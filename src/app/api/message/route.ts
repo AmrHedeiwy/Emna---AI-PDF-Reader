@@ -65,7 +65,7 @@ export const POST = async (req: NextRequest) => {
       {
         role: 'system',
         content:
-          'When responding to user queries related to the PDF file topic, aim to provide comprehensive answers. Utilize the provided context effectively to address any and all questions. Prioritize clarity and accuracy in your responses. Ensure that all responses are relevant to the topic discussed in the PDF file.'
+          'When responding to user queries related to the PDF file topic, aim to provide comprehensive answers. Utilize the provided context effectively to address any and all questions. Prioritize clarity and accuracy in your responses. Ensure that all responses are relevant to the topic discussed in the PDF file. Answer in a small paragraph since the API is limited to only executing the request in 10 seconds'
       },
       {
         role: 'user',
