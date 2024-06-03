@@ -22,7 +22,7 @@ const pricingItems = [
     price: PLANS.find((p) => p.slug === 'free')!.price.amount,
     features: [
       {
-        text: '20 pages per PDF',
+        text: '30 pages per PDF',
         footnote: 'The maximum amount of pages per PDF-file.'
       },
       {
@@ -45,11 +45,11 @@ const pricingItems = [
     price: PLANS.find((p) => p.slug === 'pro')!.price.amount,
     features: [
       {
-        text: '25 pages per PDF',
+        text: 'X pages per PDF',
         footnote: 'The maximum amount of pages per PDF-file.'
       },
       {
-        text: '32MB file size limit',
+        text: 'XMB file size limit',
         footnote: 'The maximum file size of a single PDF file.'
       },
       {
