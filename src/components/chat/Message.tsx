@@ -10,7 +10,11 @@ import rehypeKatex from 'rehype-katex';
 import rehypeHighlight from 'rehype-highlight';
 import remarkMath from 'remark-math';
 import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
+
 import { codeLanguageSubset } from '@/config/chat';
+
+import 'katex/dist/katex.min.css';
 
 interface MessageProps {
   message: ExtendedMessage;
@@ -54,8 +58,9 @@ const Message = forwardRef<HTMLDivElement, MessageProps>(
           >
             {typeof msg.content === 'string' ? (
               <ReactMarkdown
-                remarkPlugins={[remarkGfm, [remarkMath, {}]]}
+                remarkPlugins={[[remarkMath, { singleDollarTextMath: true }], remarkGfm]}
                 rehypePlugins={[
+                  rehypeRaw,
                   rehypeKatex,
                   [
                     rehypeHighlight,
@@ -67,11 +72,15 @@ const Message = forwardRef<HTMLDivElement, MessageProps>(
                   ]
                 ]}
                 className={cn(
-                  'prose',
+                  'prose markdown-content',
                   msg.isUserMessage ? 'text-white' : 'text-zinc-950'
                 )}
               >
-                {msg.content}
+                {msg.isUserMessage
+                  ? msg.content
+                  : msg.content
+                      .replace(/\\\[(.*?)\\\]/gs, (_, equation) => `$$${equation}$$`)
+                      .replace(/\\\((.*?)\\\)/gs, (_, equation) => `$${equation}$`)}
               </ReactMarkdown>
             ) : (
               msg.content
