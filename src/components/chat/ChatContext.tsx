@@ -103,8 +103,8 @@ export const ChatProvider = ({ fileId, children }: ChatProps) => {
 
         const chunkVal = decoder.decode(value, { stream: !done });
 
-        console.log(chunkVal);
         accRes += chunkVal;
+
         dashboardCtx.getFileMessages.setInfiniteData({ fileId }, (prevData: any) => {
           if (!prevData || !prevData.pages || prevData.pages.length === 0)
             return {
@@ -123,13 +123,17 @@ export const ChatProvider = ({ fileId, children }: ChatProps) => {
                   {
                     ...newData[0].messages[0],
                     content: accRes
+                      .replace(/\\\[(.*?)\\\]/gs, (_, equation) => `$$${equation}$$`)
+                      .replace(/\\\((.*?)\\\)/gs, (_, equation) => `$${equation}$`)
                   },
                   ...newData[0].messages.slice(1)
                 ]
               : [
                   {
                     id: 'ai-response',
-                    content: accRes,
+                    content: accRes
+                      .replace(/\\\[(.*?)\\\]/gs, (_, equation) => `$$${equation}$$`)
+                      .replace(/\\\((.*?)\\\)/gs, (_, equation) => `$${equation}$`),
                     isUserMessage: false,
                     createdAt: new Date().toISOString()
                   },

@@ -28,48 +28,50 @@ export const POST = async (req: NextRequest) => {
 
   if (!file) return new NextResponse('NOT_FOUND', { status: 404 });
 
-  await prisma.message.create({
-    data: { content: message, fileId, isUserMessage: true, userId: session.user.id }
+  const msg = await prisma.message.create({
+    data: { content: message, fileId, isUserMessage: true, userId: session.user.id },
+    select: { id: true }
   });
 
-  const pineconeIndex = pinecone.Index('emna');
+  try {
+    const pineconeIndex = pinecone.Index('emna');
 
-  const embeddings = new OpenAIEmbeddings({
-    openAIApiKey: process.env.OPENAI_API_KEY
-  });
+    const embeddings = new OpenAIEmbeddings({
+      openAIApiKey: process.env.OPENAI_API_KEY
+    });
 
-  const vectorStore = await PineconeStore.fromExistingIndex(embeddings, {
-    pineconeIndex,
-    namespace: file.id
-  });
+    const vectorStore = await PineconeStore.fromExistingIndex(embeddings, {
+      pineconeIndex,
+      namespace: file.id
+    });
 
-  const results = await vectorStore.similaritySearch(message, 4);
+    const results = await vectorStore.similaritySearch(message, 4);
 
-  const prevMessages = await prisma.message.findMany({
-    where: { fileId: file.id },
-    orderBy: { createdAt: 'asc' },
-    take: 6
-  });
+    const prevMessages = await prisma.message.findMany({
+      where: { fileId: file.id },
+      orderBy: { createdAt: 'asc' },
+      take: 6
+    });
 
-  const formattedPrevMessages = prevMessages.map((msg) => ({
-    role: msg.isUserMessage ? 'user' : 'assistant',
-    content: msg.content
-  }));
+    const formattedPrevMessages = prevMessages.map((msg) => ({
+      role: msg.isUserMessage ? 'user' : 'assistant',
+      content: msg.content
+    }));
 
-  const res = await openai.chat.completions.create({
-    model: 'gpt-4o-2024-05-13',
-    stream: true,
-    temperature: 0,
-    user: session.user.id,
-    messages: [
-      {
-        role: 'system',
-        content:
-          'When responding to user queries related to the PDF file topic, aim to provide comprehensive answers. Utilize the provided context effectively to address any and all questions. Prioritize clarity and accuracy in your responses. Ensure that all responses are relevant to the topic discussed in the PDF file.'
-      },
-      {
-        role: 'user',
-        content: `Use the following pieces of context (or previous conversation if needed) to answer the user's question in markdown format.
+    const res = await openai.chat.completions.create({
+      model: 'gpt-4o-2024-05-13',
+      stream: true,
+      temperature: 0,
+      user: session.user.id,
+      messages: [
+        {
+          role: 'system',
+          content:
+            'When responding to user queries related to the PDF file topic, aim to provide comprehensive answers. Utilize the provided context effectively to address any and all questions. Prioritize clarity and accuracy in your responses. Ensure that all responses are relevant to the topic discussed in the PDF file.'
+        },
+        {
+          role: 'user',
+          content: `Use the following pieces of context (or previous conversation if needed) to answer the user's question in markdown format.
           
           \n----------------\n
   
@@ -85,25 +87,33 @@ export const POST = async (req: NextRequest) => {
           ${results.map((r) => r.pageContent).join('\n\n')}
   
           USER INPUT: ${message}`
-      }
-    ]
-  });
-
-  // @ts-ignore
-  const stream = OpenAIStream(res, {
-    async onCompletion(completion) {
-      await prisma.message.create({
-        data: {
-          content: completion,
-          isUserMessage: false,
-          fileId: file.id,
-          userId: session.user.id
         }
-      });
-    }
-  });
+      ]
+    });
 
-  return new StreamingTextResponse(stream);
+    // @ts-ignore
+    const stream = OpenAIStream(res, {
+      async onCompletion(completion) {
+        await prisma.message.create({
+          data: {
+            content: completion
+              .replace(/\\\[(.*?)\\\]/gs, (_, equation) => `$$${equation}$$`)
+              .replace(/\\\((.*?)\\\)/gs, (_, equation) => `$${equation}$`),
+            isUserMessage: false,
+            fileId: file.id,
+            userId: session.user.id
+          }
+        });
+      }
+    });
+
+    return new StreamingTextResponse(stream);
+  } catch (error) {
+    await prisma.message.delete({ where: { id: msg.id } });
+
+    console.error('Error from `/api/message`: ' + error);
+    return NextResponse.json(null, { status: 400 });
+  }
 };
 
 export const maxDuration = 300;

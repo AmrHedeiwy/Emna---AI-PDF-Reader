@@ -76,11 +76,7 @@ const Message = forwardRef<HTMLDivElement, MessageProps>(
                   msg.isUserMessage ? 'text-white' : 'text-zinc-950'
                 )}
               >
-                {msg.isUserMessage
-                  ? msg.content
-                  : msg.content
-                      .replace(/\\\[(.*?)\\\]/gs, (_, equation) => `$$${equation}$$`)
-                      .replace(/\\\((.*?)\\\)/gs, (_, equation) => `$${equation}$`)}
+                {msg.content}
               </ReactMarkdown>
             ) : (
               msg.content
