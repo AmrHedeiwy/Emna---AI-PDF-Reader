@@ -1,4 +1,6 @@
 import { Email } from '@/components/Icons';
+import ResendEmailVerification from '@/components/ResendEmailVerification';
+import { Button } from '@/components/ui/button';
 import VerifyEmail from '@/components/VerifyEmail';
 
 interface PageParams {
@@ -17,9 +19,9 @@ const Page = ({ searchParams }: PageParams) => {
         {token && typeof token === 'string' ? (
           <VerifyEmail token={token} />
         ) : (
-          <div className="flex flex-col h-full  items-center justify-center space-y-1 text-center">
+          <div className="flex flex-col h-full items-center justify-center text-center">
             <Email className="w-60 h-60" />
-            <h3 className="font-semibold text-2xl">Check your email</h3>
+            <h3 className="font-semibold text-2xl mb-2">Check your email</h3>
 
             {toEmail ? (
               <p className="text-muted-foreground">
@@ -31,6 +33,10 @@ const Page = ({ searchParams }: PageParams) => {
                 We&apos;ve sent a verification link to your email.
               </p>
             )}
+            <p className="text-muted-foreground italic mt-5 text-sm">
+              If you don&apos;t see the email, please check your spam folder.
+            </p>
+            {typeof toEmail === 'string' && <ResendEmailVerification email={toEmail} />}
           </div>
         )}
       </div>

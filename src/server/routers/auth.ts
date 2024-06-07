@@ -8,6 +8,8 @@ import { z } from 'zod';
 
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import mailer from '@/lib/mailer';
+import { EmailVerify } from '@/components/emails/EmailVerify';
 
 const authRouter = router({
   createUser: publicProcedure
@@ -54,6 +56,36 @@ const authRouter = router({
       });
 
       return { success: true };
+    }),
+  resendEmailVerification: publicProcedure
+    .input(z.object({ email: z.string() }))
+    .mutation(async ({ input }) => {
+      const user = await primsa.user.findUnique({
+        where: { email: input.email, emailVerified: { equals: null } }
+      });
+
+      if (!user) throw new TRPCError({ code: 'NOT_FOUND' });
+
+      const token = jwt.sign({ email: user.email }, process.env.JWT_SECRET!, {
+        expiresIn: 60 * 1000 * 15 // 15 minutes
+      });
+
+      try {
+        await mailer({
+          to: input.email,
+          subject: 'Verify Account',
+          html: EmailVerify({
+            actionLabel: 'verify your account',
+            buttonText: 'Verify Account',
+            href: `${process.env.NEXT_PUBLIC_SERVER_URL}/verify-email?token=${token}`
+          })
+        });
+      } catch (error) {
+        console.error('SEND EMAIL VERIFICATION: \n' + error);
+        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', cause: error });
+      }
+
+      return { success: true, sentToEmail: input.email };
     })
 });
 

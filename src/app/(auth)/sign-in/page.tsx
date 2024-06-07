@@ -19,7 +19,7 @@ import { signIn } from 'next-auth/react';
 import { toast } from 'sonner';
 
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const Page = () => {
   const router = useRouter();
@@ -27,15 +27,18 @@ const Page = () => {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get('callbackUrl');
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const {
     register,
     handleSubmit,
-    formState: { errors, isLoading }
+    formState: { errors }
   } = useForm<TLoginCredentialsValidator>({
     resolver: zodResolver(LoginCredentialsValidator)
   });
 
   const onSubmit = async (data: TLoginCredentialsValidator) => {
+    setIsLoading(true);
     signIn('credentials', { ...data, redirect: false }).then((res) => {
       if (!!res?.error) toast.error(res.error);
 
@@ -47,6 +50,7 @@ const Page = () => {
 
         router.refresh();
       }
+      setIsLoading(false);
     });
   };
 

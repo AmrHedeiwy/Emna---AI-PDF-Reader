@@ -28,12 +28,12 @@ const Page = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isLoading }
+    formState: { errors }
   } = useForm<TCreateAccountCredentialsValidator>({
     resolver: zodResolver(CreateAccountCredentialsValidator)
   });
 
-  const { mutate: signUp } = trpc.auth.createUser.useMutation({
+  const { mutate: signUp, isPending } = trpc.auth.createUser.useMutation({
     onError: (err) => {
       if (err.data?.code === 'CONFLICT') {
         toast.error('This email is already in use. Sign in instead?');
@@ -112,8 +112,8 @@ const Page = () => {
                 )}
               </div>
 
-              <Button disabled={isLoading}>
-                {isLoading ? (
+              <Button disabled={isPending}>
+                {isPending ? (
                   <div className="flex items-center space-x-2">
                     <Loader2 className="animate-spin h-6 w-6 text-zinc-300" />
                     <p className="font-semibold text-muted">Loading...</p>
@@ -140,7 +140,7 @@ const Page = () => {
           <div className="flex w-full">
             <Button
               className="flex w-full"
-              disabled={isLoading}
+              disabled={isPending}
               onClick={() => signIn('google', { redirect: false })}
             >
               <Google className="w-5 h-5 mr-2" /> Google
