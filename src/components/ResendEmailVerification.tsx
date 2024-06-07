@@ -4,6 +4,7 @@ import { trpc } from '@/app/_trpc/client';
 import { Button } from './ui/button';
 import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react';
+import { useCallback } from 'react';
 
 const ResendEmailVerification = ({ email }: { email: string }) => {
   const { mutate, isPending } = trpc.auth.resendEmailVerification.useMutation({
@@ -21,9 +22,9 @@ const ResendEmailVerification = ({ email }: { email: string }) => {
       })
   });
 
-  const resendEmailVerification = () => {
+  const resendEmailVerification = useCallback(() => {
     return (_: any) => mutate({ email });
-  };
+  }, []);
 
   return (
     <Button className="mt-4" onClick={resendEmailVerification()} disabled={isPending}>

@@ -4,7 +4,7 @@ import { signOut } from 'next-auth/react';
 import { Button } from './ui/button';
 import { cn } from '@/lib/utils';
 
-const SignOutButton = ({ className }: { className?: string }) => {
+const SignOut = ({ className }: { className?: string }) => {
   return (
     <Button
       onClick={() => signOut({ callbackUrl: '/' })}
@@ -19,4 +19,4 @@ const SignOutButton = ({ className }: { className?: string }) => {
   );
 };
 
-export default SignOutButton;
+export default SignOut;

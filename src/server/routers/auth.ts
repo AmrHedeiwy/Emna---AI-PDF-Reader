@@ -1,5 +1,5 @@
 import { CreateAccountCredentialsValidator } from '@/lib/validators/auth-credentials-validator';
-import { publicProcedure, router } from '../trpc';
+import { privateProcudure, publicProcedure, router } from '../trpc';
 
 import primsa from '@/lib/prismadb';
 import { TRPCError } from '@trpc/server';
@@ -86,7 +86,16 @@ const authRouter = router({
       }
 
       return { success: true, sentToEmail: input.email };
-    })
+    }),
+  deleteUser: privateProcudure.mutation(async ({ ctx }) => {
+    const user = await primsa.user.findUnique({ where: { id: ctx.user!.id } });
+
+    if (!user) throw new TRPCError({ code: 'NOT_FOUND' });
+
+    await primsa.user.delete({ where: { id: ctx.user!.id } });
+
+    return { success: true };
+  })
 });
 
 export default authRouter;

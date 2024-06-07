@@ -3,10 +3,11 @@
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import SignOutButton from '../SignOutButton';
+import SignOut from '../SignOut';
 import { useContext } from 'react';
 import { NavContext } from './NavProvider';
 import { TGetUserSubscription } from '@/lib/stripe';
+import DeleteAccount from '../DeleteAccount';
 
 const MobileNav = ({
   isAuth,
@@ -94,7 +95,8 @@ const MobileNav = ({
                 Pricing
               </Link>
             )}
-            <SignOutButton className="p-0 h-7 text-muted-foreground text-base hover:bg-transparent" />
+            <SignOut className="p-0 h-7 text-muted-foreground text-base hover:bg-transparent" />
+            <DeleteAccount className="p-0 h-7 text-muted-foreground text-base hover:bg-transparent" />
           </>
         )}
       </div>

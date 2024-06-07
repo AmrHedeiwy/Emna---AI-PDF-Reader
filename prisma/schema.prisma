@@ -71,7 +71,7 @@ model File {
   url String
   key String
 
-  user User? @relation(fields: [userId], references: [id])
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String?
 
   messages Message[]
@@ -80,8 +80,6 @@ model File {
   updatedAt DateTime @updatedAt
 }
 
-
-
 model Message {
   id String @id @default(cuid())
   content String @db.Text()
@@ -89,9 +87,9 @@ model Message {
   isUserMessage Boolean
 
 
-  user User? @relation(fields: [userId], references: [id])
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String?
-  file File? @relation(fields: [fileId], references: [id])
+  file File? @relation(fields: [fileId], references: [id], onDelete: Cascade)
   fileId String?
 
   createdAt DateTime @default(now())

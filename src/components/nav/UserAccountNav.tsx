@@ -9,8 +9,9 @@ import { Button } from '../ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Gem, User } from 'lucide-react';
 import Link from 'next/link';
-import SignOutButton from '../SignOutButton';
+import SignOut from '../SignOut';
 import { TGetUserSubscription } from '@/lib/stripe';
+import DeleteAccount from '../DeleteAccount';
 
 interface UserAccountNavProps {
   email: string | null | undefined;
@@ -58,7 +59,9 @@ const UserAccountNav = async ({
         </DropdownMenuItem>
         <DropdownMenuSeparator />
 
-        <SignOutButton />
+        <SignOut />
+
+        <DeleteAccount />
       </DropdownMenuContent>
     </DropdownMenu>
   );
