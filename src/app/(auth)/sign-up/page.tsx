@@ -45,7 +45,7 @@ const Page = () => {
         return;
       }
 
-      toast.error('Something went wrong. Please try again.');
+      toast.error('Something went wrong', { description: 'Please try again later.' });
     },
     onSuccess: ({ sentToEmail }) => {
       toast.success(`Verification email sent to ${sentToEmail}.`);

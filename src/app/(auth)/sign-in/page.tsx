@@ -20,6 +20,7 @@ import { toast } from 'sonner';
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { trpc } from '@/app/_trpc/client';
 
 const Page = () => {
   const router = useRouter();
@@ -28,6 +29,8 @@ const Page = () => {
   const callbackUrl = searchParams.get('callbackUrl');
 
   const [isLoading, setIsLoading] = useState(false);
+  const { mutate: resendEmailVerification } =
+    trpc.auth.resendEmailVerification.useMutation();
 
   const {
     register,
@@ -40,16 +43,27 @@ const Page = () => {
   const onSubmit = async (data: TLoginCredentialsValidator) => {
     setIsLoading(true);
     signIn('credentials', { ...data, redirect: false }).then((res) => {
-      if (!!res?.error) toast.error(res.error);
+      if (res?.error) {
+        if (res.error === 'INVALID_CREDENTIALS')
+          toast.error('Invalid credentials', {
+            description: 'Make sure your email and password are correct.'
+          });
+        else if (res.error === 'EMAIL_NOT_VERIFIED') {
+          toast.error('Email not verified', {
+            description: 'Please verify your email and try again.'
+          });
 
-      if (res?.ok) {
-        toast.success('Signed in successfully!');
-
+          router.push(`/verify-email?to=${data.email}`);
+          resendEmailVerification({ email: data.email });
+        } else
+          toast.error('Something went wrong', { description: 'Please try again later.' });
+      } else {
         if (!!callbackUrl) router.push(callbackUrl);
         else router.push('/dashboard');
 
         router.refresh();
       }
+
       setIsLoading(false);
     });
   };

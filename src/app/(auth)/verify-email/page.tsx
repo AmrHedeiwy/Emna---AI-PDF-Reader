@@ -1,6 +1,5 @@
 import { Email } from '@/components/Icons';
 import ResendEmailVerification from '@/components/ResendEmailVerification';
-import { Button } from '@/components/ui/button';
 import VerifyEmail from '@/components/VerifyEmail';
 
 interface PageParams {

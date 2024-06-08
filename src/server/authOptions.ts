@@ -32,19 +32,19 @@ const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials.password)
-          throw new Error('Invalid Credentials');
+          throw new Error('INVALID_CREDENTIALS');
 
         const user = await prisma.user.findUnique({
           where: { email: credentials.email }
         });
 
-        if (!user || !user.hashedPassword) throw new Error('Invalid Credentials');
+        if (!user || !user.hashedPassword) throw new Error('INVALID_CREDENTIALS');
 
-        if (!user.emailVerified) throw new Error('Email Not Verified');
+        const isMatch = await bcrypt.compare(credentials.password, user.hashedPassword);
 
-        const isMatch = bcrypt.compare(credentials.password, user.hashedPassword);
+        if (!isMatch) throw new Error('INVALID_CREDENTIALS');
 
-        if (!isMatch) throw new Error('Invalid Credentials');
+        if (!user.emailVerified) throw new Error('EMAIL_NOT_VERIFIED');
 
         return user;
       }
