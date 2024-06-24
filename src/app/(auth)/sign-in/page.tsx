@@ -19,7 +19,7 @@ import { signIn } from 'next-auth/react';
 import { toast } from 'sonner';
 
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { trpc } from '@/app/_trpc/client';
 
 const Page = () => {

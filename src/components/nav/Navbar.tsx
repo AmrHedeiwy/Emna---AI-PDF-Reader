@@ -16,8 +16,8 @@ const Navbar = async () => {
   return (
     <>
       <header className="sticky top-0 inset-x-0 w-full z-50">
-        <MaxWidthWrapper className="max-w-screen-lg rounded-b-sm backdrop-blur-lg transition-all lg:px-4">
-          <div className="flex items-center justify-between h-14 transition-all">
+        <MaxWidthWrapper className="max-w-screen-lg rounded-b-sm backdrop-blur-lg hover:underline transition-all lg:px-4">
+          <div className="flex items-center text-lg justify-between h-14 transition-all">
             <NavLogo />
 
             <div className="sm:hidden">
